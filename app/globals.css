@@ -1,8 +1,15 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #1d4e4f; /* base teal gelap tapi masih kelihatan */
+  --surface: #20535c; /* warna container */
+  --accent: #3ca1a1; /* warna tombol & highlight */
+  --text-primary: #e6f5f5;
+  --text-secondary: #aacccc;
+  --input-bg: #2e7b7b;
+  --input-border: #3ca1a1;
 }
 
 @theme inline {
@@ -20,7 +27,35 @@
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--background);
+  color: var(--text-primary);
+  font-family: 'Inter', sans-serif;
+}
+
+.card {
+  background-color: var(--surface);
+  color: var(--text-primary);
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  padding: 1rem;
+}
+
+input, textarea {
+  background-color: var(--input-bg);
+  border: 1px solid var(--input-border);
+  color: var(--text-primary);
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+}
+
+button {
+  background-color: var(--accent);
+  color: #fff;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  transition: background 0.2s ease-in-out;
+}
+
+button:hover {
+  background-color: #48bcbc;
 }

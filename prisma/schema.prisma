@@ -1,0 +1,1233 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model accounts {
+  ID              Int     @id @default(autoincrement())
+  email           String  @default("None") @db.VarChar(40)
+  Username        String? @db.VarChar(24)
+  BindCharacterID Int?    @default(-1)
+  Password        String? @db.VarChar(129)
+  Password_Bcrypt String? @db.VarChar(129)
+  salt            String  @db.VarChar(16)
+  verifycode      Int
+  DiscordID       BigInt
+  regucp          Int
+  RegisterDate    String? @db.VarChar(36)
+  LoginDate       String? @db.VarChar(36)
+  IP              String? @default("n/a") @db.VarChar(16)
+  DonatePoint     Int     @default(0)
+}
+
+model actors {
+  ID       Int    @id @default(autoincrement())
+  Skin     Int    @default(1)
+  Anim     Int    @default(0)
+  AnimLoop Int    @default(0)
+  PosX     Float  @default(0) @db.Float
+  PosY     Float  @default(0) @db.Float
+  PosZ     Float  @default(0) @db.Float
+  PosA     Float  @default(0) @db.Float
+  Name     String @db.VarChar(24)
+  World    Int    @default(0)
+  Interior Int    @default(0)
+}
+
+model arrestpoints {
+  arrestID       Int   @id @default(autoincrement())
+  arrestX        Float @db.Float
+  arrestY        Float @db.Float
+  arrestZ        Float @db.Float
+  arrestInterior Int
+  arrestWorld    Int
+  arrestSPosX    Float @db.Float
+  arrestSPosY    Float @db.Float
+  arrestSPosZ    Float @db.Float
+  arrestSPosA    Float @db.Float
+  arrestSPosInt  Int
+  arrestSPosVw   Int
+}
+
+model atm {
+  atmID       Int   @id @default(autoincrement())
+  atmX        Float @db.Float
+  atmY        Float @db.Float
+  atmZ        Float @db.Float
+  atmA        Float @db.Float
+  atmInterior Int
+  atmWorld    Int
+}
+
+model backpackitems {
+  ID           Int?    @default(0)
+  itemID       Int     @id @default(autoincrement())
+  itemName     String? @db.VarChar(32)
+  itemModel    Int?    @default(0)
+  itemQuantity Int?    @default(0)
+}
+
+model backpacks {
+  backpackID       Int    @id @default(autoincrement())
+  backpackPlayer   Int?   @default(0)
+  backpackX        Float? @default(0) @db.Float
+  backpackY        Float? @default(0) @db.Float
+  backpackZ        Float? @default(0) @db.Float
+  backpackInterior Int?   @default(0)
+  backpackWorld    Int?   @default(0)
+  backpackHouse    Int?   @default(0)
+  backpackVehicle  Int?   @default(0)
+}
+
+model bank_accounts {
+  id         Int      @id @default(autoincrement())
+  OwnerID    Int
+  AccNumber  BigInt   @unique(map: "account_number")
+  AccName    String   @db.VarChar(50)
+  Balance    BigInt?  @default(0)
+  created_at DateTime @default(now()) @db.Timestamp(0)
+}
+
+model bank_transactions {
+  id              Int                    @id @default(autoincrement())
+  AccountID       Int
+  Type            bank_transactions_Type
+  Amount          BigInt
+  TargetAccountID Int?                   @default(-1)
+  Description     String                 @default("None") @db.VarChar(128)
+  MadeDescription String                 @default("None") @db.VarChar(128)
+  created_at      DateTime               @default(now()) @db.Timestamp(0)
+}
+
+model bill {
+  bid     Int    @id
+  type    Int    @default(-1)
+  name    String @default("None") @db.VarChar(36)
+  target  Int    @default(-1)
+  ammount Int    @default(0)
+  note    String @default("None") @db.VarChar(36)
+}
+
+model billboards {
+  bbID      Int     @id @default(autoincrement())
+  bbExists  Int?    @default(0)
+  bbName    String? @db.VarChar(32)
+  bbOwner   Int     @default(0)
+  bbPrice   Int     @default(0)
+  bbRange   Int?    @default(10)
+  bbPosX    Float?  @default(0) @db.Float
+  bbPosY    Float?  @default(0) @db.Float
+  bbPosZ    Float?  @default(0) @db.Float
+  bbMessage String? @db.VarChar(230)
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model blacklist {
+  IP       String? @default("0.0.0.0") @db.VarChar(16)
+  Username String? @db.VarChar(24)
+  BannedBy String? @db.VarChar(24)
+  Reason   String? @db.VarChar(128)
+  Date     String? @db.VarChar(36)
+
+  @@ignore
+}
+
+model businesses {
+  bizID         Int     @id @default(autoincrement())
+  bizName       String? @db.VarChar(32)
+  bizOwner      Int?    @default(0)
+  bizType       Int?    @default(0)
+  bizPrice      Int?    @default(0)
+  bizEntrance   Int?    @default(0)
+  bizPosX       Float?  @default(0) @db.Float
+  bizPosY       Float?  @default(0) @db.Float
+  bizPosZ       Float?  @default(0) @db.Float
+  bizPosA       Float?  @default(0) @db.Float
+  bizIntX       Float?  @default(0) @db.Float
+  bizIntY       Float?  @default(0) @db.Float
+  bizIntZ       Float   @default(0) @db.Float
+  bizIntA       Float?  @default(0) @db.Float
+  bizInterior   Int?    @default(0)
+  bizInteriorVw Int?    @default(0)
+  bizExterior   Int?    @default(0)
+  bizExteriorVW Int?    @default(0)
+  bizLocked     Int?    @default(0)
+  bizVault      Int?    @default(0)
+  bizCargo      Int     @default(1000)
+  bizProducts   Int?    @default(0)
+  bizPrice1     Int?    @default(0)
+  bizPrice2     Int?    @default(0)
+  bizPrice3     Int?    @default(0)
+  bizPrice4     Int?    @default(0)
+  bizPrice5     Int?    @default(0)
+  bizPrice6     Int?    @default(0)
+  bizPrice7     Int?    @default(0)
+  bizPrice8     Int?    @default(0)
+  bizPrice9     Int?    @default(0)
+  bizPrice10    Int?    @default(0)
+  bizSpawnX     Float?  @default(0) @db.Float
+  bizSpawnY     Float?  @default(0) @db.Float
+  bizSpawnZ     Float?  @default(0) @db.Float
+  bizSpawnA     Float?  @default(0) @db.Float
+  bizBPointX    Float?  @default(0) @db.Float
+  bizBPointY    Float?  @default(0) @db.Float
+  bizBPointZ    Float?  @default(0) @db.Float
+  bizBPointVw   Int?    @default(0)
+  bizBPointInt  Int?    @default(0)
+  bizRobPosX    Float?  @default(0) @db.Float
+  bizRobPosY    Float?  @default(0) @db.Float
+  bizRobPosZ    Float?  @default(0) @db.Float
+  bizRobVw      Int?    @default(0)
+  bizRobInt     Int?    @default(0)
+  bizDeliverX   Float?  @default(0) @db.Float
+  bizDeliverY   Float?  @default(0) @db.Float
+  bizDeliverZ   Float?  @default(0) @db.Float
+  bizMessage    String? @db.VarChar(128)
+  bizPrice11    Int?    @default(0)
+  bizPrice12    Int?    @default(0)
+  bizPrice13    Int?    @default(0)
+  bizPrice14    Int?    @default(0)
+  bizPrice15    Int?    @default(0)
+  bizPrice16    Int?    @default(0)
+  bizPrice17    Int?    @default(0)
+  bizPrice18    Int?    @default(0)
+  bizPrice19    Int?    @default(0)
+  bizPrice20    Int?    @default(0)
+  bizShipment   Int?    @default(0)
+}
+
+model cars {
+  carID            Int      @id @default(autoincrement())
+  carModel         Int?     @default(0)
+  carOwner         Int?     @default(0)
+  carPosX          Float?   @default(0) @db.Float
+  carPosY          Float?   @default(0) @db.Float
+  carPosZ          Float?   @default(0) @db.Float
+  carPosR          Float?   @default(0) @db.Float
+  carColor1        Int?     @default(0)
+  carColor2        Int?     @default(0)
+  carPaintjob      Int?     @default(-1)
+  carLocked        Int?     @default(0)
+  carHealth        Float?   @default(0) @db.Float
+  carFuel          Int?     @default(100)
+  carPlate         String   @default("-") @db.VarChar(50)
+  carPlateCustom   Int      @default(0)
+  carPlate_Time    BigInt
+  carPlate_Time1   String   @default("EXPIRED") @db.VarChar(16)
+  carPark          Int?     @default(-1)
+  carRental        Int      @default(-1)
+  carRentType      Int      @default(0)
+  carRentalPrice   Int      @default(0)
+  carRentalTime    Int      @default(0)
+  carDamage1       Int?     @default(0)
+  carDamage2       Int?     @default(0)
+  carDamage3       Int?     @default(0)
+  carDamage4       Int?     @default(0)
+  carMod1          Int?     @default(0)
+  carMod2          Int?     @default(0)
+  carMod3          Int?     @default(0)
+  carMod4          Int?     @default(0)
+  carMod5          Int?     @default(0)
+  carMod6          Int?     @default(0)
+  carMod7          Int?     @default(0)
+  carMod8          Int?     @default(0)
+  carMod9          Int?     @default(0)
+  carMod10         Int?     @default(0)
+  carMod11         Int?     @default(0)
+  carMod12         Int?     @default(0)
+  carMod13         Int?     @default(0)
+  carMod14         Int?     @default(0)
+  carWeapon1       Int?     @default(0)
+  carAmmo1         Int?     @default(0)
+  carWeapon2       Int?     @default(0)
+  carAmmo2         Int?     @default(0)
+  carWeapon3       Int?     @default(0)
+  carAmmo3         Int?     @default(0)
+  carWeapon4       Int?     @default(0)
+  carAmmo4         Int?     @default(0)
+  carWeapon5       Int?     @default(0)
+  carAmmo5         Int?     @default(0)
+  carInsurance     Int?     @default(0)
+  carImpounded     Int?     @default(0)
+  carImpoundPrice  Int?     @default(0)
+  carLicense       Int?     @default(0)
+  carFaction       Int?     @default(0)
+  carSpeedLevel    Int?     @default(1)
+  carBrakeLevel    Int?     @default(1)
+  carMusicTittle1  String?  @default("None") @db.VarChar(128)
+  carMusicTittle2  String?  @default("None") @db.VarChar(128)
+  carMusicTittle3  String?  @default("None") @db.VarChar(128)
+  carMusicTittle4  String?  @default("None") @db.VarChar(128)
+  carMusicTittle5  String?  @default("None") @db.VarChar(128)
+  carMusicTittle6  String?  @default("None") @db.VarChar(128)
+  carMusicTittle7  String?  @default("None") @db.VarChar(128)
+  carMusicTittle8  String?  @default("None") @db.VarChar(128)
+  carMusicTittle9  String?  @default("None") @db.VarChar(128)
+  carMusicTittle10 String?  @default("None") @db.VarChar(128)
+  carMusicTittle11 String?  @default("None") @db.VarChar(128)
+  carMusicTittle12 String?  @default("None") @db.VarChar(128)
+  carMusicTittle13 String?  @default("None") @db.VarChar(128)
+  carMusicTittle14 String?  @default("None") @db.VarChar(128)
+  Column_72        String?  @default("None") @map("Column 72") @db.VarChar(128)
+  carMusicTittle15 String?  @default("None") @db.VarChar(128)
+  carMusicURL1     String?  @default("None") @db.VarChar(128)
+  carMusicURL2     String?  @default("None") @db.VarChar(128)
+  carMusicURL3     String?  @default("None") @db.VarChar(128)
+  carMusicURL4     String?  @default("None") @db.VarChar(128)
+  carMusicURL5     String?  @default("None") @db.VarChar(128)
+  carMusicURL6     String?  @default("None") @db.VarChar(128)
+  carMusicURL7     String?  @default("None") @db.VarChar(128)
+  carMusicURL8     String?  @default("None") @db.VarChar(128)
+  carMusicURL9     String?  @default("None") @db.VarChar(128)
+  carMusicURL10    String?  @default("None") @db.VarChar(128)
+  carMusicURL11    String?  @default("None") @db.VarChar(128)
+  carMusicURL12    String?  @default("None") @db.VarChar(128)
+  carMusicURL13    String?  @default("None") @db.VarChar(128)
+  carMusicURL14    String?  @default("None") @db.VarChar(128)
+  carMusicURL15    String?  @default("None") @db.VarChar(128)
+  created_at       DateTime @default(now()) @db.Timestamp(0)
+}
+
+model carstorage {
+  ID           Int?    @default(0)
+  itemID       Int     @id @default(autoincrement())
+  itemName     String? @db.VarChar(32)
+  itemModel    Int?    @default(0)
+  itemQuantity Int?    @default(0)
+  itemSlot     Int     @default(-1)
+}
+
+model characters {
+  ID                  Int         @id @default(autoincrement())
+  Username            String?     @db.VarChar(24)
+  Character           String?     @db.VarChar(24)
+  Admin               Int?        @default(0)
+  Created             Int?        @default(0)
+  Gender              Int?        @default(0)
+  Birthdate           String?     @default("01/01/1970") @db.VarChar(32)
+  Origin              String?     @default("Not Specified") @db.VarChar(32)
+  Height              Int?        @default(0)
+  Skin                Int?        @default(0)
+  PosX                Float?      @default(0) @db.Float
+  PosY                Float?      @default(0) @db.Float
+  PosZ                Float?      @default(0) @db.Float
+  PosA                Float?      @default(0) @db.Float
+  Interior            Int?        @default(0)
+  World               Int?        @default(0)
+  Hospital            Int?        @default(-1)
+  HospitalInt         Int?        @default(0)
+  IDCard              Int?        @default(0)
+  IDCardTime          Int?        @default(0)
+  IDCardTime0         String?     @default("EXPIRED") @db.VarChar(16)
+  License_A           Int?        @default(0) @map("License-A")
+  License_B           Int?        @default(0) @map("License-B")
+  License_C           Int?        @default(0) @map("License-C")
+  License_D1          Int?        @default(0) @map("License-D1")
+  License_D2          Int?        @default(0) @map("License-D2")
+  License_Lumber      Int?        @default(0) @map("License-Lumber")
+  License_Gun         Int?        @default(0) @map("License-Gun")
+  LicenseTime_A       Int?        @default(0) @map("LicenseTime-A")
+  LicenseTime1_A      String?     @default("EXPIRED") @map("LicenseTime1-A") @db.VarChar(16)
+  LicenseTime_B       Int?        @default(0) @map("LicenseTime-B")
+  LicenseTime1_B      String?     @default("EXPIRED") @map("LicenseTime1-B") @db.VarChar(16)
+  LicenseTime_C       Int?        @default(0) @map("LicenseTime-C")
+  LicenseTime1_C      String?     @default("EXPIRED") @map("LicenseTime1-C") @db.VarChar(16)
+  LicenseTime_D1      Int?        @default(0) @map("LicenseTime-D1")
+  LicenseTime1_D1     String?     @default("EXPIRED") @map("LicenseTime1-D1") @db.VarChar(16)
+  LicenseTime_D2      Int?        @default(0) @map("LicenseTime-D2")
+  LicenseTime1_D2     String?     @default("EXPIRED") @map("LicenseTime1-D2") @db.VarChar(16)
+  LicenseTime_Lumber  Int?        @default(0) @map("LicenseTime-Lumber")
+  LicenseTime1_Lumber String?     @default("EXPIRED") @map("LicenseTime1-Lumber") @db.VarChar(16)
+  LicenseTime_Gun     Int?        @default(0) @map("LicenseTime-Gun")
+  LicenseTime1_Gun    String?     @default("EXPIRED") @map("LicenseTime1-Gun") @db.VarChar(16)
+  SKWB                Int?        @default(0)
+  SKWBTimer           Int?        @default(0)
+  SKWBTime            String?     @default("EXPIRED") @db.VarChar(16)
+  Money               Int?        @default(0)
+  BankMoney           Int?        @default(0)
+  OwnsBillboard       Int?        @default(-1)
+  Savings             Int?        @default(0)
+  Salary              Int?        @default(0)
+  Muted               Int?        @default(0)
+  CreateDate          Int?        @default(0)
+  LastLogin           Int?        @default(0)
+  Tester              Int?        @default(0)
+  Gun1                Int?        @default(0)
+  Gun2                Int?        @default(0)
+  Gun3                Int?        @default(0)
+  Gun4                Int?        @default(0)
+  Gun5                Int?        @default(0)
+  Gun6                Int?        @default(0)
+  Gun7                Int?        @default(0)
+  Gun8                Int?        @default(0)
+  Gun9                Int?        @default(0)
+  Gun10               Int?        @default(0)
+  Gun11               Int?        @default(0)
+  Gun12               Int?        @default(0)
+  Gun13               Int?        @default(0)
+  Ammo1               Int?        @default(0)
+  Ammo2               Int?        @default(0)
+  Ammo3               Int?        @default(0)
+  Ammo4               Int?        @default(0)
+  Ammo5               Int?        @default(0)
+  Ammo6               Int?        @default(0)
+  Ammo7               Int?        @default(0)
+  Ammo8               Int?        @default(0)
+  Ammo9               Int?        @default(0)
+  Ammo10              Int?        @default(0)
+  Ammo11              Int?        @default(0)
+  Ammo12              Int?        @default(0)
+  Ammo13              Int?        @default(0)
+  House               Int?        @default(-1)
+  Business            Int?        @default(-1)
+  Phone               Int?        @default(0)
+  AirDropOff          Int?        @default(0)
+  PhoneWallpaperColor Int?        @default(0)
+  Lottery             Int?        @default(0)
+  LotteryB            Int         @default(0)
+  Hunger              Int?        @default(100)
+  Thirst              Int?        @default(100)
+  Stress              Int?        @default(0)
+  InvSetting          Int?        @default(1)
+  WmSetting           Int?        @default(1)
+  RandomMessage       Int?        @default(1)
+  HudMode             Int?        @default(1)
+  SPDMode             Int?        @default(2)
+  PlayingHours        Int?        @default(0)
+  Level               Int?        @default(1)
+  Exp                 Int?        @default(0)
+  LastExit            Int?        @default(0)
+  Minutes             Int?        @default(0)
+  ArmorStatus         Float?      @default(0) @db.Float
+  Entrance            Int?        @default(0)
+  Job                 Int?        @default(0)
+  Faction             Int?        @default(-1)
+  FactionRank         Int?        @default(0)
+  FacSkin             Int?        @default(-1)
+  OnDuty              Int?        @default(0)
+  Tazer               Int?        @default(0)
+  HaveTazer           Int?        @default(0)
+  Prisoned            Int?        @default(0)
+  JailTime            Int?        @default(0)
+  JailReason          String      @default("") @db.VarChar(64)
+  JailBy              String      @default("") @db.VarChar(24)
+  Warrants            Int?        @default(0)
+  Injured             Int?        @default(0)
+  InjuredTime         Int?        @default(0)
+  Cuffed              Int?        @default(0)
+  Tied                Int?        @default(0)
+  Addicted            Int?        @default(0)
+  DrugIsUsed          Int?        @default(0)
+  DrugUsed            Int?        @default(0)
+  OverDosis           Int?        @default(0)
+  RehabTime           Int?        @default(0)
+  RehabOption         Int?        @default(0)
+  Health              Float?      @default(0) @db.Float
+  Channel             Int?        @default(0)
+  Accent              String?     @db.VarChar(24)
+  Bleeding            Int?        @default(0)
+  Warnings            Int?        @default(0)
+  Warn1               String?     @db.VarChar(32)
+  Warn2               String?     @db.VarChar(32)
+  MaskID              Int?        @default(0)
+  FactionMod          Int?        @default(0)
+  Capacity            Int?        @default(35)
+  AdminHide           Int?        @default(0)
+  CentTD              Int?        @default(1)
+  Render              Int?        @default(1)
+  RenderTime          Int?        @default(1)
+  DisableOOC          Int?        @default(1)
+  DisableFaction      Int?        @default(1)
+  DisableIdle         Int?        @default(1)
+  DisableLog          Int?        @default(1)
+  AutoStartEN         Int?        @default(1)
+  AutoStopEN          Int?        @default(1)
+  AddSlotHouse        Int?        @default(0)
+  AddSlotCar          Int?        @default(0)
+  VIP                 Boolean     @default(false)
+  VIPTime             Int         @default(0)
+  VIPNametag          Boolean     @default(false)
+  VIPNametagText      String?     @db.VarChar(64)
+  FishDelay           Int?        @default(0)
+  ClaimCh             Int?        @default(0)
+  ShowSnow            Int?        @default(0)
+  ShowFlake           Int?        @default(0)
+  GudangLow           Int?        @default(0)
+  GudangMid           Int?        @default(0)
+  GudangHigh          Int?        @default(0)
+  Staterpack1         Int?        @default(0)
+  Staterpack2         Int?        @default(0)
+  halloweens          halloweens?
+}
+
+model contacts {
+  ID            Int?    @default(0)
+  contactID     Int     @id @default(autoincrement())
+  contactName   String? @db.VarChar(32)
+  contactNumber Int?    @default(0)
+}
+
+model crates {
+  crateID Int @id @default(autoincrement())
+  Type    Int @default(0)
+  Vehicle Int @default(-1)
+}
+
+model dealervehicles {
+  ID       Int? @default(0)
+  vehID    Int  @id @default(autoincrement())
+  vehModel Int? @default(0)
+  vehPrice Int? @default(0)
+}
+
+model detectors {
+  detectorID       Int    @id @default(autoincrement())
+  detectorX        Float? @default(0) @db.Float
+  detectorY        Float? @default(0) @db.Float
+  detectorZ        Float? @default(0) @db.Float
+  detectorAngle    Float? @default(0) @db.Float
+  detectorInterior Int?   @default(0)
+  detectorWorld    Int?   @default(0)
+}
+
+model dropped {
+  ID           Int     @id @default(autoincrement())
+  itemName     String? @db.VarChar(32)
+  itemModel    Int?    @default(0)
+  itemX        Float?  @default(0) @db.Float
+  itemY        Float?  @default(0) @db.Float
+  itemZ        Float?  @default(0) @db.Float
+  itemInt      Int?    @default(0)
+  itemWorld    Int?    @default(0)
+  itemQuantity Int?    @default(0)
+  itemAmmo     Int?    @default(0)
+  itemWeapon   Int?    @default(0)
+  itemPlayer   String? @db.VarChar(24)
+}
+
+model entrances {
+  entranceID         Int     @id @default(autoincrement())
+  entranceName       String? @db.VarChar(32)
+  entranceIcon       Int?    @default(0)
+  entrancePosX       Float?  @default(0) @db.Float
+  entrancePosY       Float?  @default(0) @db.Float
+  entrancePosZ       Float?  @default(0) @db.Float
+  entrancePosA       Float?  @default(0) @db.Float
+  entranceIntX       Float?  @default(0) @db.Float
+  entranceIntY       Float?  @default(0) @db.Float
+  entranceIntZ       Float?  @default(0) @db.Float
+  entranceIntA       Float?  @default(0) @db.Float
+  entranceInterior   Int?    @default(0)
+  entranceExterior   Int?    @default(0)
+  entranceExteriorVW Int?    @default(0)
+  entranceType       Int?    @default(0)
+  entrancePass       String? @db.VarChar(32)
+  entranceLocked     Int?    @default(0)
+  entranceFaction    Int?    @default(-1)
+  entranceCustom     Int?    @default(0)
+  entranceWorld      Int?    @default(0)
+}
+
+model factions {
+  factionID            Int     @id @default(autoincrement())
+  factionName          String? @db.VarChar(64)
+  factionColor         Int?    @default(0)
+  factionType          Int?    @default(0)
+  factionRanks         Int?    @default(0)
+  factionLockerX       Float?  @default(0) @db.Float
+  factionLockerY       Float?  @default(0) @db.Float
+  factionLockerZ       Float?  @default(0) @db.Float
+  factionLockerInt     Int?    @default(0)
+  factionLockerWorld   Int?    @default(0)
+  factionStorageX      Float   @default(0) @db.Float
+  factionStorageY      Float?  @default(0) @db.Float
+  factionStorageZ      Float?  @default(0) @db.Float
+  factionStorageInt    Int?    @default(0)
+  factionStorageWorld  Int?    @default(0)
+  factionRank1         String? @db.VarChar(32)
+  factionRank2         String? @db.VarChar(32)
+  factionRank3         String? @db.VarChar(32)
+  factionRank4         String? @db.VarChar(32)
+  factionRank5         String? @db.VarChar(32)
+  factionRank6         String? @db.VarChar(32)
+  factionRank7         String? @db.VarChar(32)
+  factionRank8         String? @db.VarChar(32)
+  factionRank9         String? @db.VarChar(32)
+  factionRank10        String? @db.VarChar(32)
+  factionRank11        String? @db.VarChar(32)
+  factionRank12        String? @db.VarChar(32)
+  factionRank13        String? @db.VarChar(32)
+  factionRank14        String? @db.VarChar(32)
+  factionRank15        String? @db.VarChar(32)
+  factionSkinM1        Int?    @default(0)
+  factionSkinM2        Int?    @default(0)
+  factionSkinM3        Int?    @default(0)
+  factionSkinM4        Int?    @default(0)
+  factionSkinM5        Int?    @default(0)
+  factionSkinM6        Int?    @default(0)
+  factionSkinM7        Int?    @default(0)
+  factionSkinM8        Int?    @default(0)
+  factionSkinF1        Int?    @default(0)
+  factionSkinF2        Int?    @default(0)
+  factionSkinF3        Int?    @default(0)
+  factionSkinF4        Int?    @default(0)
+  factionSkinF5        Int?    @default(0)
+  factionSkinF6        Int?    @default(0)
+  factionSkinF7        Int?    @default(0)
+  factionSkinF8        Int?    @default(0)
+  SpawnX               Float   @db.Float
+  SpawnY               Float   @db.Float
+  SpawnZ               Float   @db.Float
+  SpawnInterior        Int
+  SpawnVW              Int
+  factionMoney         Int?    @default(0)
+  factionGarageX       Float?  @default(0) @db.Float
+  factionGarageY       Float?  @default(0) @db.Float
+  factionGarageZ       Float?  @default(0) @db.Float
+  factionGarageInt     Int?    @default(0)
+  factionGarageWorld   Int?    @default(0)
+  factionHelipadX      Float?  @default(0) @db.Float
+  factionHelipadY      Float?  @default(0) @db.Float
+  factionHelipadZ      Float?  @default(0) @db.Float
+  factionHelipadA      Float?  @default(0) @db.Float
+  factionHelipadInt    Int?    @default(0)
+  factionHelipadWorld  Int?    @default(0)
+  factionGarageColor1  Int?    @default(0)
+  factionGarageColor2  Int?    @default(0)
+  factionGarageModel1  Int?    @default(0)
+  factionGarageModel2  Int?    @default(0)
+  factionGarageModel3  Int?    @default(0)
+  factionGarageModel4  Int?    @default(0)
+  factionGarageModel5  Int?    @default(0)
+  factionGarageModel6  Int?    @default(0)
+  factionGarageModel7  Int?    @default(0)
+  factionGarageModel8  Int?    @default(0)
+  factionGarageModel9  Int?    @default(0)
+  factionGarageModel10 Int?    @default(0)
+  factionGarageModel11 Int?    @default(0)
+  factionGarageModel12 Int?    @default(0)
+}
+
+model factionstorage {
+  ID           Int?    @default(0)
+  itemID       Int     @id @default(autoincrement())
+  itemName     String? @db.VarChar(32)
+  itemModel    Int?    @default(0)
+  itemQuantity Int?    @default(0)
+  itemSlot     Int     @default(-1)
+}
+
+model furniture {
+  ID             Int?    @default(0)
+  furnitureID    Int     @id @default(autoincrement())
+  furnitureName  String? @db.VarChar(32)
+  furnitureModel Int?    @default(0)
+  furnitureSpawn Int?    @default(0)
+  furnitureX     Float?  @default(0) @db.Float
+  furnitureY     Float?  @default(0) @db.Float
+  furnitureZ     Float?  @default(0) @db.Float
+  furnitureRX    Float?  @default(0) @db.Float
+  furnitureRY    Float?  @default(0) @db.Float
+  furnitureRZ    Float?  @default(0) @db.Float
+  furnitureType  Int?    @default(0)
+}
+
+model garage {
+  gID    Int     @id @default(autoincrement())
+  gName  String? @db.VarChar(32)
+  gHouse Int?    @default(-1)
+  gPosX  Float?  @default(0) @db.Float
+  gPosY  Float?  @default(0) @db.Float
+  gPosZ  Float?  @default(0) @db.Float
+  gPosA  Float?  @default(0) @db.Float
+  gInt   Int?    @default(0)
+  gVw    Int?    @default(0)
+  gdPosX Float?  @default(0) @db.Float
+  gdPosY Float?  @default(0) @db.Float
+  gdPosZ Float?  @default(0) @db.Float
+  gdInt  Int?    @default(0)
+  gdVw   Int?    @default(0)
+}
+
+model garbage {
+  garbageID       Int    @id @default(autoincrement())
+  garbageModel    Int?   @default(1236)
+  garbageX        Float? @default(0) @db.Float
+  garbageY        Float? @default(0) @db.Float
+  garbageZ        Float? @default(0) @db.Float
+  garbageA        Float? @default(0) @db.Float
+  garbageInterior Int?   @default(0)
+  garbageWorld    Int?   @default(0)
+}
+
+model gates {
+  gateID       Int     @id @default(autoincrement())
+  gateModel    Int?    @default(0)
+  gateSpeed    Float?  @default(0) @db.Float
+  gateTime     Int?    @default(0)
+  gateX        Float?  @default(0) @db.Float
+  gateY        Float?  @default(0) @db.Float
+  gateZ        Float?  @default(0) @db.Float
+  gateRX       Float?  @default(0) @db.Float
+  gateRY       Float?  @default(0) @db.Float
+  gateRZ       Float?  @default(0) @db.Float
+  gateInterior Int?    @default(0)
+  gateWorld    Int?    @default(0)
+  gateMoveX    Float?  @default(0) @db.Float
+  gateMoveY    Float?  @default(0) @db.Float
+  gateMoveZ    Float?  @default(0) @db.Float
+  gateMoveRX   Float?  @default(0) @db.Float
+  gateMoveRY   Float?  @default(0) @db.Float
+  gateMoveRZ   Float?  @default(0) @db.Float
+  gateLinkID   Int?    @default(0)
+  gateFaction  Int?    @default(0)
+  gatePass     String? @db.VarChar(32)
+  gateRadius   Float?  @default(0) @db.Float
+}
+
+model gps {
+  ID           Int?    @default(0)
+  locationID   Int     @id @default(autoincrement())
+  locationName String? @db.VarChar(32)
+  locationX    Float?  @default(0) @db.Float
+  locationY    Float?  @default(0) @db.Float
+  locationZ    Float?  @default(0) @db.Float
+}
+
+model graffiti {
+  graffitiID    Int     @id @default(autoincrement())
+  graffitiX     Float?  @default(0) @db.Float
+  graffitiY     Float?  @default(0) @db.Float
+  graffitiZ     Float?  @default(0) @db.Float
+  graffitiAngle Float?  @default(0) @db.Float
+  graffitiColor Int?    @default(0)
+  graffitiText  String? @db.VarChar(64)
+}
+
+model gudang_high {
+  ID       Int?    @default(0)
+  gID      Int     @id @default(autoincrement())
+  ItemName String? @db.VarChar(32)
+  Model    Int?    @default(0)
+  Quantity Int?    @default(0)
+  Slot     Int     @default(-1)
+}
+
+model gudang_low {
+  ID       Int?    @default(0)
+  gID      Int     @id @default(autoincrement())
+  ItemName String? @db.VarChar(32)
+  Model    Int?    @default(0)
+  Quantity Int?    @default(0)
+  Slot     Int     @default(-1)
+}
+
+model gudang_mid {
+  ID       Int?    @default(0)
+  gID      Int     @id @default(autoincrement())
+  ItemName String? @db.VarChar(32)
+  Model    Int?    @default(0)
+  Quantity Int?    @default(0)
+  Slot     Int     @default(-1)
+}
+
+model gunracks {
+  rackID       Int    @id @default(autoincrement())
+  rackHouse    Int?   @default(0)
+  rackSpawn    Int?   @default(0)
+  rackX        Float? @default(0) @db.Float
+  rackY        Float? @default(0) @db.Float
+  rackZ        Float? @default(0) @db.Float
+  rackA        Float? @default(0) @db.Float
+  rackInterior Int?   @default(0)
+  rackWorld    Int?   @default(0)
+  rackWeapon1  Int?   @default(0)
+  rackAmmo1    Int?   @default(0)
+  rackWeapon2  Int?   @default(0)
+  rackAmmo2    Int?   @default(0)
+  rackWeapon3  Int?   @default(0)
+  rackAmmo3    Int?   @default(0)
+  rackWeapon4  Int?   @default(0)
+  rackAmmo4    Int?   @default(0)
+}
+
+model halloweens {
+  playerID    Int        @id
+  pumpCoin    Int?       @default(0)
+  pumpHexcard Int?       @default(0)
+  characters  characters @relation(fields: [playerID], references: [ID], onDelete: Cascade, map: "halloweens_ibfk_1")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model housekeys {
+  HouseID Int
+  Player  String @db.VarChar(24)
+  Date    Int
+
+  @@ignore
+}
+
+model houses {
+  houseID         Int     @id @default(autoincrement())
+  houseOwner      Int?    @default(0)
+  houseOwnerName  String  @db.VarChar(32)
+  housePrice      Int?    @default(0)
+  houseAddress    String? @db.VarChar(32)
+  houseType       Int?    @default(1)
+  housePosX       Float?  @default(0) @db.Float
+  housePosY       Float?  @default(0) @db.Float
+  housePosZ       Float?  @default(0) @db.Float
+  housePosA       Float?  @default(0) @db.Float
+  houseIntX       Float?  @default(0) @db.Float
+  houseIntY       Float?  @default(0) @db.Float
+  houseIntZ       Float?  @default(0) @db.Float
+  houseIntA       Float?  @default(0) @db.Float
+  houseInterior   Int?    @default(0)
+  houseExterior   Int?    @default(0)
+  houseExteriorVW Int?    @default(0)
+  houseLocked     Int?    @default(0)
+  houseWeapon1    Int?    @default(0)
+  houseAmmo1      Int?    @default(0)
+  houseWeapon2    Int?    @default(0)
+  houseAmmo2      Int?    @default(0)
+  houseWeapon3    Int?    @default(0)
+  houseAmmo3      Int?    @default(0)
+  houseWeapon4    Int?    @default(0)
+  houseAmmo4      Int?    @default(0)
+  houseWeapon5    Int?    @default(0)
+  houseAmmo5      Int?    @default(0)
+  houseWeapon6    Int?    @default(0)
+  houseAmmo6      Int?    @default(0)
+  houseWeapon7    Int?    @default(0)
+  houseAmmo7      Int?    @default(0)
+  houseWeapon8    Int?    @default(0)
+  houseAmmo8      Int?    @default(0)
+  houseWeapon9    Int?    @default(0)
+  houseAmmo9      Int?    @default(0)
+  houseWeapon10   Int?    @default(0)
+  houseAmmo10     Int?    @default(0)
+  houseMoney      Int?    @default(0)
+}
+
+model housestorage {
+  ID           Int?    @default(0)
+  itemID       Int     @id @default(autoincrement())
+  itemName     String? @db.VarChar(32)
+  itemModel    Int?    @default(0)
+  itemQuantity Int?    @default(0)
+  itemSlot     Int     @default(-1)
+}
+
+model impoundlots {
+  impoundID           Int    @id @default(autoincrement())
+  impoundLotX         Float? @default(0) @db.Float
+  impoundLotY         Float? @default(0) @db.Float
+  impoundLotZ         Float? @default(0) @db.Float
+  impoundReleaseX     Float? @default(0) @db.Float
+  impoundReleaseY     Float? @default(0) @db.Float
+  impoundReleaseZ     Float? @default(0) @db.Float
+  impoundReleaseInt   Int?   @default(0)
+  impoundReleaseWorld Int?   @default(0)
+  impoundReleaseA     Float? @default(0) @db.Float
+}
+
+model inventory {
+  ID          Int?    @default(0)
+  invID       Int     @id @default(autoincrement())
+  invItem     String? @db.VarChar(32)
+  invModel    Int?    @default(0)
+  invQuantity Int?    @default(0)
+  invSlot     Int     @default(-1)
+}
+
+model jobs_office {
+  jobID       Int    @id @default(autoincrement())
+  jobType     Int?   @default(0)
+  jobVehID    Int?   @default(0)
+  jobPosX     Float? @default(0) @db.Float
+  jobPosY     Float? @default(0) @db.Float
+  jobPosZ     Float? @default(0) @db.Float
+  jobPosVw    Int?   @default(0)
+  jobPosInt   Int?   @default(0)
+  jobSpawnX   Float  @default(0) @db.Float
+  jobSpawnY   Float? @default(0) @db.Float
+  jobSpawnZ   Float? @default(0) @db.Float
+  jobSpawnA   Float? @default(0) @db.Float
+  jobSpawnInt Int?   @default(0)
+  jobSpawnVw  Int?   @default(0)
+}
+
+model migrations {
+  id        Int    @id @default(autoincrement()) @db.UnsignedInt
+  migration String @db.VarChar(255)
+  batch     Int
+}
+
+model namechanges {
+  ID      Int     @id @default(autoincrement())
+  OldName String? @db.VarChar(24)
+  NewName String? @db.VarChar(24)
+  Date    String? @db.VarChar(36)
+}
+
+model notes {
+  ID    Int     @id @default(autoincrement())
+  owner Int     @default(-1)
+  text  String? @db.VarChar(100)
+  x     Float?  @default(0) @db.Float
+  y     Float?  @default(0) @db.Float
+  z     Float?  @default(0) @db.Float
+  int   Int?    @default(0)
+  world Int?    @default(0)
+}
+
+model order_items {
+  id         BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  order_id   BigInt    @db.UnsignedBigInt
+  name       String    @db.VarChar(255)
+  qty        Int
+  price      Decimal   @db.Decimal(10, 2)
+  created_at DateTime? @db.Timestamp(0)
+  updated_at DateTime? @db.Timestamp(0)
+  orders     orders    @relation(fields: [order_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "order_items_order_id_foreign")
+
+  @@index([order_id], map: "order_items_order_id_foreign")
+}
+
+model orders {
+  id             BigInt        @id @default(autoincrement()) @db.UnsignedBigInt
+  user_id        BigInt        @db.UnsignedBigInt
+  username       String        @db.VarChar(255)
+  character_name String        @db.VarChar(255)
+  payment        String        @db.VarChar(255)
+  total_price    Decimal       @db.Decimal(10, 2)
+  created_at     DateTime?     @db.Timestamp(0)
+  updated_at     DateTime?     @db.Timestamp(0)
+  order_items    order_items[]
+}
+
+model ores {
+  id    Int    @id
+  posx  Float? @db.Float
+  posy  Float? @db.Float
+  posz  Float? @db.Float
+  posrx Float? @db.Float
+  posry Float? @db.Float
+  posrz Float? @db.Float
+}
+
+model plants {
+  plantID       Int    @id @default(autoincrement())
+  plantType     Int?   @default(0)
+  plantX        Float? @default(0) @db.Float
+  plantY        Float? @default(0) @db.Float
+  plantZ        Float? @default(0) @db.Float
+  plantA        Float? @default(0) @db.Float
+  plantInterior Int?   @default(0)
+  plantWorld    Int?   @default(0)
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model player_spaceman {
+  Username String? @db.VarChar(50)
+  Password String? @db.VarChar(50)
+  Created  Int?    @default(0)
+  Balance  Int?    @default(0)
+
+  @@ignore
+}
+
+model player_stats {
+  discord_id       String   @id @db.VarChar(20)
+  total_bets       Int      @default(0)
+  total_wins       Int      @default(0)
+  total_losses     Int      @default(0)
+  total_ties       Int      @default(0)
+  total_blackjacks Int      @default(0)
+  points_won       Int      @default(0)
+  points_lost      Int      @default(0)
+  last_played      DateTime @default(now()) @db.Timestamp(0)
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model player_twitter {
+  Username String? @db.VarChar(50)
+  Password String? @db.VarChar(50)
+  Created  Int?    @default(0)
+
+  @@ignore
+}
+
+model playermusic {
+  MusicID Int    @id @default(autoincrement())
+  OwnerID Int
+  Title   String @db.VarChar(64)
+  Link    String @db.VarChar(64)
+}
+
+model playerweapon {
+  ID         Int               @id @default(autoincrement())
+  OwnerID    Int
+  WeaponUsed Int
+  WeaponID   Int
+  WeaponName String            @db.VarChar(64)
+  Ammo       Int?              @default(0)
+  Durability Float?            @default(0) @db.Float
+  Type       playerweapon_Type
+}
+
+model pumps {
+  ID       Int?   @default(0)
+  pumpID   Int    @id @default(autoincrement())
+  pumpPosX Float? @default(0) @db.Float
+  pumpPosY Float? @default(0) @db.Float
+  pumpPosZ Float? @default(0) @db.Float
+  pumpPosA Float? @default(0) @db.Float
+  pumpFuel Int?   @default(0)
+}
+
+model rental {
+  ID       Int   @id @default(autoincrement())
+  PosX     Float @default(0) @db.Float
+  PosY     Float @default(0) @db.Float
+  PosZ     Float @default(0) @db.Float
+  SpawnX   Float @default(0) @db.Float
+  SpawnY   Float @default(0) @db.Float
+  SpawnZ   Float @default(0) @db.Float
+  SpawnA   Float @default(0) @db.Float
+  Vehicle1 Int   @default(0)
+  Vehicle2 Int   @default(0)
+  Price1   Int   @default(0)
+  Price2   Int   @default(0)
+  Faction  Int   @default(-1)
+}
+
+model saved_music {
+  id   Int    @id @default(autoincrement())
+  name String @db.VarChar(64)
+  url  String @db.VarChar(128)
+}
+
+model serverdata {
+  id              Int @id @default(autoincrement())
+  PriceGandum     Int @default(0)
+  PriceKentang    Int @default(0)
+  PriceTomat      Int @default(0)
+  PriceSelada     Int @default(0)
+  PriceJeruk      Int @default(0)
+  PriceChicken    Int @default(0)
+  PriceBeef       Int @default(0)
+  PriceKayu       Int @default(0)
+  PricePapan      Int @default(0)
+  PriceKertas     Int @default(0)
+  PricePerak      Int @default(0)
+  PriceBesi       Int @default(0)
+  PriceTembaga    Int @default(0)
+  PriceEmas       Int @default(0)
+  PriceBerlian    Int @default(0)
+  PricePermata    Int @default(0)
+  PriceCoal       Int @default(0)
+  StockOil        Int @default(0)
+  PriceOil        Int @default(0)
+  PriceAnggur     Int @default(0)
+  PriceTeh        Int @default(0)
+  PriceGula       Int @default(0)
+  PriceCabai      Int @default(0)
+  PriceBombay     Int @default(0)
+  PriceKopi       Int @default(0)
+  PriceChocolate  Int @default(0)
+  PriceTelur      Int @default(0)
+  PriceSusu       Int @default(0)
+  PriceFuel       Int @default(0)
+  PriceCod        Int @default(0)
+  PriceHerring    Int @default(0)
+  PriceSardine    Int @default(0)
+  PriceTuna       Int @default(0)
+  PriceSalmon     Int @default(0)
+  PriceAutoRepair Int @default(0)
+  PriceInsurance  Int @default(0)
+}
+
+model speedcameras {
+  speedID    Int    @id @default(autoincrement())
+  speedRange Float? @default(0) @db.Float
+  speedLimit Float? @default(0) @db.Float
+  speedX     Float? @default(0) @db.Float
+  speedY     Float? @default(0) @db.Float
+  speedZ     Float? @default(0) @db.Float
+  speedAngle Float? @default(0) @db.Float
+}
+
+model submission {
+  id         Int      @id @default(autoincrement())
+  name       String
+  nim        String
+  linkTugas  String
+  linkTugas2 String?
+  courseId   Int
+  course     course   @relation(fields: [courseId], references: [id])
+  createdAt  DateTime @default(now())
+}
+
+model course {
+  id         Int          @id @default(autoincrement())
+  name       String       @db.VarChar(255)
+  code       String?      @unique(map: "code") @db.VarChar(100)
+  createdAt  DateTime?    @default(now()) @db.DateTime(0)
+  submission submission[]
+}
+
+model tickets {
+  ID            Int?    @default(0)
+  ticketID      Int     @id @default(autoincrement())
+  ticketFaction Int?    @default(0)
+  ticketFee     Int?    @default(0)
+  ticketDate    String? @db.VarChar(64)
+  ticketReason  String? @db.VarChar(64)
+  ticketBy      String  @default("None") @db.VarChar(24)
+}
+
+model toys {
+  Id           Int    @id @default(autoincrement())
+  Owner        String @default("") @db.VarChar(40)
+  Slot0_Model  Int    @default(0)
+  Slot0_Bone   Int    @default(0)
+  Slot0_Hide   Int    @default(0)
+  Slot0_XPos   Float  @default(0.000) @db.Float
+  Slot0_YPos   Float  @default(0.000) @db.Float
+  Slot0_ZPos   Float  @default(0.000) @db.Float
+  Slot0_XRot   Float  @default(0.000) @db.Float
+  Slot0_YRot   Float  @default(0.000) @db.Float
+  Slot0_ZRot   Float  @default(0.000) @db.Float
+  Slot0_XScale Float  @default(0.000) @db.Float
+  Slot0_YScale Float  @default(0.000) @db.Float
+  Slot0_ZScale Float  @default(0.000) @db.Float
+  Slot0_Color1 Float  @default(0.000) @db.Float
+  Slot0_Color2 Float  @default(0.000) @db.Float
+  Slot1_Model  Int    @default(0)
+  Slot1_Bone   Int    @default(0)
+  Slot1_Hide   Int    @default(0)
+  Slot1_XPos   Float  @default(0.000) @db.Float
+  Slot1_YPos   Float  @default(0.000) @db.Float
+  Slot1_ZPos   Float  @default(0.000) @db.Float
+  Slot1_XRot   Float  @default(0.000) @db.Float
+  Slot1_YRot   Float  @default(0.000) @db.Float
+  Slot1_ZRot   Float  @default(0.000) @db.Float
+  Slot1_XScale Float  @default(0.000) @db.Float
+  Slot1_YScale Float  @default(0.000) @db.Float
+  Slot1_ZScale Float  @default(0.000) @db.Float
+  Slot1_Color1 Float  @default(0.000) @db.Float
+  Slot1_Color2 Float  @default(0.000) @db.Float
+  Slot2_Model  Int    @default(0)
+  Slot2_Bone   Int    @default(0)
+  Slot2_Hide   Int    @default(0)
+  Slot2_XPos   Float  @default(0.000) @db.Float
+  Slot2_YPos   Float  @default(0.000) @db.Float
+  Slot2_ZPos   Float  @default(0.000) @db.Float
+  Slot2_XRot   Float  @default(0.000) @db.Float
+  Slot2_YRot   Float  @default(0.000) @db.Float
+  Slot2_ZRot   Float  @default(0.000) @db.Float
+  Slot2_XScale Float  @default(0.000) @db.Float
+  Slot2_YScale Float  @default(0.000) @db.Float
+  Slot2_ZScale Float  @default(0.000) @db.Float
+  Slot2_Color1 Float  @default(0.000) @db.Float
+  Slot2_Color2 Float  @default(0.000) @db.Float
+  Slot3_Model  Int    @default(0)
+  Slot3_Bone   Int    @default(0)
+  Slot3_Hide   Int    @default(0)
+  Slot3_XPos   Float  @default(0.000) @db.Float
+  Slot3_YPos   Float  @default(0.000) @db.Float
+  Slot3_ZPos   Float  @default(0.000) @db.Float
+  Slot3_XRot   Float  @default(0.000) @db.Float
+  Slot3_YRot   Float  @default(0.000) @db.Float
+  Slot3_ZRot   Float  @default(0.000) @db.Float
+  Slot3_XScale Float  @default(0.000) @db.Float
+  Slot3_YScale Float  @default(0.000) @db.Float
+  Slot3_ZScale Float  @default(0.000) @db.Float
+  Slot3_Color1 Float  @default(0.000) @db.Float
+  Slot3_Color2 Float  @default(0.000) @db.Float
+  Slot4_Model  Int    @default(0)
+  Slot4_Bone   Int    @default(0)
+  Slot4_Hide   Int    @default(0)
+  Slot4_XPos   Float  @default(0.000) @db.Float
+  Slot4_YPos   Float  @default(0.000) @db.Float
+  Slot4_ZPos   Float  @default(0.000) @db.Float
+  Slot4_XRot   Float  @default(0.000) @db.Float
+  Slot4_YRot   Float  @default(0.000) @db.Float
+  Slot4_ZRot   Float  @default(0.000) @db.Float
+  Slot4_XScale Float  @default(0.000) @db.Float
+  Slot4_YScale Float  @default(0.000) @db.Float
+  Slot4_ZScale Float  @default(0.000) @db.Float
+  Slot4_Color1 Float  @default(0.000) @db.Float
+  Slot4_Color2 Float  @default(0.000) @db.Float
+  Slot5_Model  Int    @default(0)
+  Slot5_Bone   Int    @default(0)
+  Slot5_Hide   Int    @default(0)
+  Slot5_XPos   Float  @default(0.000) @db.Float
+  Slot5_YPos   Float  @default(0.000) @db.Float
+  Slot5_ZPos   Float  @default(0.000) @db.Float
+  Slot5_XRot   Float  @default(0.000) @db.Float
+  Slot5_YRot   Float  @default(0.000) @db.Float
+  Slot5_ZRot   Float  @default(0.000) @db.Float
+  Slot5_XScale Float  @default(0.000) @db.Float
+  Slot5_YScale Float  @default(0.000) @db.Float
+  Slot5_ZScale Float  @default(0.000) @db.Float
+  Slot5_Color1 Float  @default(0.000) @db.Float
+  Slot5_Color2 Float  @default(0.000) @db.Float
+}
+
+model trees {
+  id    Int    @id
+  posx  Float? @db.Float
+  posy  Float? @db.Float
+  posz  Float? @db.Float
+  posrx Float? @db.Float
+  posry Float? @db.Float
+  posrz Float? @db.Float
+}
+
+model warrants {
+  ID          Int     @id @default(autoincrement())
+  Suspect     String? @db.VarChar(24)
+  Username    String? @db.VarChar(24)
+  Date        String? @db.VarChar(36)
+  Description String? @db.VarChar(128)
+}
+
+model weapon_drop {
+  ID         Int              @id @default(autoincrement())
+  WeaponID   Int
+  WeaponName String           @db.VarChar(64)
+  Ammo       Int
+  Durability Float            @db.Float
+  Type       weapon_drop_Type
+  PosX       Float            @db.Float
+  PosY       Float            @db.Float
+  PosZ       Float            @db.Float
+  PosA       Float            @db.Float
+  Interior   Int?             @default(0)
+  World      Int?             @default(0)
+}
+
+enum bank_transactions_Type {
+  Deposit
+  Withdraw
+  Transfer
+  Received
+}
+
+enum weapon_drop_Type {
+  Ilegal
+  Legal
+  Spawn
+}
+
+enum playerweapon_Type {
+  Ilegal
+  Legal
+  Spawn
+}
